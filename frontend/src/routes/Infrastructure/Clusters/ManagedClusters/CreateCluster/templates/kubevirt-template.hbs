@@ -65,9 +65,10 @@ kind: Secret
 metadata:
   name: infra-cluster-{{{clusterName}}}
   namespace: 'clusters'
-data:
+stringData:
 {{#if showSecrets}}  
-  kubeconfig: {{{kubeconfig}}}
+  kubeconfig: |-
+    {{{kubeconfig}}}
   {{else}}
   kubeconfig: #injected on create
 {{/if}}
@@ -77,11 +78,12 @@ kind: Secret
 metadata:
   name: pullsecret-cluster-{{{clusterName}}}
   namespace: clusters
-data:
+stringData:
   {{#if showSecrets}}
-  '.dockerconfigjson': {{{pullSecret}}}
+  .dockerconfigjson: |-
+    {{{pullSecret}}}
   {{else}}
-  '.dockerconfigjson': #injected on create
+  .dockerconfigjson: #injected on create
   {{/if}}
 type: kubernetes.io/dockerconfigjson
 
@@ -91,7 +93,7 @@ kind: Secret
 metadata:
   name: sshkey-cluster-{{{clusterName}}}
   namespace: 'clusters'
-data:
+stringData:
   {{#if showSecrets}}
   id_rsa.pub: {{{ssh-publickey}}}
   {{else}}
