@@ -86,6 +86,7 @@ import keyBy from 'lodash/keyBy'
 import { HighlightSearchText } from '../../../../components/HighlightSearchText'
 import { SearchOperator } from '../../../../ui-components/AcmSearchInput'
 import { handleStandardComparison, handleSemverOperatorComparison } from '../../../../lib/search-utils'
+import AcmTimestamp from '../../../../lib/AcmTimestamp'
 
 const onToggle = (acmCardID: string, setOpen: (open: boolean) => void) => {
   setOpen(false)
@@ -141,6 +142,9 @@ export default function ManagedClusters() {
       <PageSection>
         <OnboardingModal open={openOnboardingModal} close={() => onToggle(onBoardingModalID, setOpenOnboardingModal)} />
         <Stack hasGutter={true}>
+          <StackItem>
+            <AcmTimestamp timestamp="2024-11-29T21:29:11-05:00" />
+          </StackItem>
           <StackItem>
             <ClustersTable
               clusters={clusters}
