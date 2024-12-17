@@ -20,6 +20,7 @@ const AcmTimestamp: React.FC<AcmTimestampProps> = ({
   const {
     ocpApi: { Timestamp },
   } = useContext(PluginContext)
+
   return Timestamp ? (
     <Timestamp
       timestamp={timestamp}

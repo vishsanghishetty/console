@@ -143,9 +143,6 @@ export default function ManagedClusters() {
         <OnboardingModal open={openOnboardingModal} close={() => onToggle(onBoardingModalID, setOpenOnboardingModal)} />
         <Stack hasGutter={true}>
           <StackItem>
-            <AcmTimestamp timestamp="2024-11-29T21:29:11-05:00" />
-          </StackItem>
-          <StackItem>
             <ClustersTable
               clusters={clusters}
               tableButtonActions={[
@@ -999,7 +996,7 @@ export function useClusterCreatedDateColumn(): IAcmTableColumn<Cluster> {
     search: 'creationDate',
     cellTransforms: [nowrap],
     cell: (cluster) => {
-      return getCreationTimestampString(cluster)
+      return <AcmTimestamp timestamp={cluster.creationTimestamp || ''} />
     },
     exportContent: (cluster) => {
       return getCreationTimestampString(cluster)
