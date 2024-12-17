@@ -9,10 +9,6 @@ interface SimpleTimestampProps {
 export const SimpleTimestamp: React.FC<SimpleTimestampProps> = ({ timestamp }) => {
   const date = new Date(timestamp)
 
-  if (isNaN(date.getTime())) {
-    return <>{''}</>
-  }
-
   let formattedDate = date.toLocaleString('en-GB', {
     day: '2-digit',
     month: 'short',
