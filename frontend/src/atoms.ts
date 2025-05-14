@@ -130,6 +130,16 @@ export const isGlobalHubState = atom<boolean>({
   default: false,
 })
 
+export const localHubNameState = atom<string>({
+  key: 'localHubName',
+  default: 'local-cluster',
+})
+
+export const isHubSelfManagedState = atom<boolean | undefined>({
+  key: 'isHubSelfManaged',
+  default: undefined,
+})
+
 export interface Settings {
   LOG_LEVEL?: string
   SAVED_SEARCH_LIMIT?: string
@@ -144,6 +154,8 @@ export interface Settings {
 
   APP_ARGO_SEARCH_RESULT_LIMIT?: string
   APP_OCP_SEARCH_RESULT_LIMIT?: string
+
+  VM_RESULT_LIMIT?: string
 }
 
 export interface WatchEvent {
@@ -220,4 +232,9 @@ export function useAppArgoSearchResultLimit() {
 export function useAppOCPSearchResultLimit() {
   const settings = useRecoilValue(settingsState)
   return useMemo(() => parseInt(settings.APP_OCP_SEARCH_RESULT_LIMIT ?? '1000'), [settings])
+}
+
+export function useVitualMachineSearchResultLimit() {
+  const settings = useRecoilValue(settingsState)
+  return useMemo(() => parseInt(settings.VM_RESULT_LIMIT ?? '-1'), [settings])
 }
