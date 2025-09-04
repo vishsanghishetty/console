@@ -1,0 +1,37 @@
+{
+  "name": "@stolostron/acm-metrics-dashboard",
+  "version": "1.0.0",
+  "description": "Team velocity and development metrics dashboard for ACM console",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "collect": "node scripts/collect-metrics.js",
+    "collect-weekly": "node scripts/collect-metrics.js --period=week",
+    "collect-monthly": "node scripts/collect-metrics.js --period=month",
+    "setup": "node scripts/setup.js",
+    "test": "node scripts/test-metrics.js"
+  },
+  "keywords": [
+    "acm",
+    "metrics",
+    "dashboard",
+    "velocity",
+    "team",
+    "analytics"
+  ],
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "chart.js": "^4.4.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
