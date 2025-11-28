@@ -53,7 +53,7 @@ echo "Console URL: http://localhost:${CONSOLE_PORT}"
 
 function getBridgePlugins {
     local host=$1
-    local plugins=""
+    local plugins=",genie-plugin=http://${host}:9001"
     if [ -n "$KUBEVIRT_PORT" ]; then
         plugins="${plugins},kubevirt-plugin=http://${host}:${KUBEVIRT_PORT}"
     fi
@@ -62,14 +62,13 @@ function getBridgePlugins {
         plugins="${plugins},odf-multicluster-console=http://${host}:${ODF_PORT}"
     fi
 
-
     echo "mce=http://${host}:${MCE_PORT},acm=http://${host}:${ACM_PORT}${plugins}"
 }
 
 function getBridgePluginProxy {
     local host=$1
     local endpoint="https://${host}:${BACKEND_PORT}"
-    echo "{\"services\": [{\"consoleAPIPath\": \"/api/proxy/plugin/mce/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/acm/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}]}"
+    echo "{\"services\": [{\"consoleAPIPath\": \"/api/proxy/plugin/mce/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/acm/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/monitoring-console-plugin/perses/\", \"endpoint\": \"http://${host}:9090\", \"authorize\": true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/lightspeed/\", \"endpoint\": \"http://${host}:8080/\"}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/dashboard-mcp/\", \"endpoint\": \"http://${host}:9081/mcp\"}]}"
 }
 
 # Prefer podman if installed. Otherwise, fall back to docker.
