@@ -53,7 +53,9 @@ echo "Console URL: http://localhost:${CONSOLE_PORT}"
 
 function getBridgePlugins {
     local host=$1
-    local plugins=",genie-plugin=http://${host}:9001"
+    # Support both genie-plugin (legacy) and genie-web-client (new)
+    # genie-plugin on 9001, genie-web-client on 9002
+    local plugins=",genie-plugin=http://${host}:9001,genie-web-client=http://${host}:9002"
     if [ -n "$KUBEVIRT_PORT" ]; then
         plugins="${plugins},kubevirt-plugin=http://${host}:${KUBEVIRT_PORT}"
     fi
@@ -68,7 +70,8 @@ function getBridgePlugins {
 function getBridgePluginProxy {
     local host=$1
     local endpoint="https://${host}:${BACKEND_PORT}"
-    echo "{\"services\": [{\"consoleAPIPath\": \"/api/proxy/plugin/mce/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/acm/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/monitoring-console-plugin/perses/\", \"endpoint\": \"http://${host}:9090\", \"authorize\": true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/lightspeed/\", \"endpoint\": \"http://${host}:8080/\"}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/dashboard-mcp/\", \"endpoint\": \"http://${host}:9081/mcp\"}]}"
+    # Proxy config for both genie-plugin and genie-web-client
+    echo "{\"services\": [{\"consoleAPIPath\": \"/api/proxy/plugin/mce/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/acm/console/\", \"endpoint\":\"${endpoint}\",\"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/monitoring-console-plugin/perses/\", \"endpoint\": \"http://${host}:9090\", \"authorize\": true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/lightspeed/\", \"endpoint\": \"http://${host}:8080/\", \"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-plugin/dashboard-mcp/\", \"endpoint\": \"http://${host}:9081/mcp\", \"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-web-client/ols/\", \"endpoint\": \"http://${host}:8080/\", \"authorize\":true}, {\"consoleAPIPath\": \"/api/proxy/plugin/genie-web-client/dashboard-mcp/\", \"endpoint\": \"http://${host}:9081/mcp\", \"authorize\":true}]}"
 }
 
 # Prefer podman if installed. Otherwise, fall back to docker.
