@@ -26,8 +26,8 @@ import { LostChangesContext } from '~/components/LostChanges'
 import { LoadingPage } from '~/components/LoadingPage'
 import { useTimezones } from '~/hooks/useTimezone'
 
-export default function CreateArgoApplicationSetPullModelPage() {
-  return <CreateApplicationArgoPullModel />
+export default function CreatePullApplicationSetPage() {
+  return <CreatePullApplicationSet />
 }
 
 export function GetGitOpsClusters(gitOpsClusters: GitOpsCluster[]) {
@@ -66,7 +66,7 @@ function getWizardSyncEditor() {
   return <WizardSyncEditor />
 }
 
-export function CreateApplicationArgoPullModel() {
+export function CreatePullApplicationSet() {
   const { t } = useTranslation()
   const {
     channelsState,

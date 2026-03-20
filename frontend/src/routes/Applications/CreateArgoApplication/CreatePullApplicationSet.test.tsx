@@ -55,7 +55,7 @@ import {
   SecretKind,
 } from '~/resources'
 import { gitOpsOperators } from '~/routes/Applications/Application.sharedmocks'
-import { CreateApplicationArgoPullModel } from './CreateApplicationArgoPullModel'
+import { CreatePullApplicationSet } from './CreatePullApplicationSet'
 import { EditArgoApplicationSet } from './EditArgoApplicationSet'
 
 const gitOpsCluster: GitOpsCluster = {
@@ -401,7 +401,7 @@ describe('Create Argo Application Set', () => {
       >
         <MemoryRouter initialEntries={[NavigationPath.createApplicationArgoPullModel]}>
           <Routes>
-            <Route path={NavigationPath.createApplicationArgoPullModel} element={<CreateApplicationArgoPullModel />} />
+            <Route path={NavigationPath.createApplicationArgoPullModel} element={<CreatePullApplicationSet />} />
           </Routes>
         </MemoryRouter>
       </RecoilRoot>
