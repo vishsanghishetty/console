@@ -1,9 +1,9 @@
 /* Copyright Contributors to the Open Cluster Management project */
 import { useCallback, useMemo } from 'react'
+import { AcmButton, AcmEmptyState, AcmTable, compareStrings, IAcmTableButtonAction } from '~/ui-components'
 import { Trans, useTranslation } from '../../../../lib/acm-i18next'
 import { DOC_LINKS, ViewDocumentationLink } from '../../../../lib/doc-util'
 import { Group } from '../../../../resources/rbac'
-import { AcmEmptyState, AcmTable } from '../../../../ui-components'
 import { groupsTableColumns, useFilters } from '../IdentityTableHelper'
 import { useMergedGroups } from '../useMergedIdentities'
 
@@ -12,6 +12,11 @@ interface GroupsTableProps {
   areLinksDisplayed?: boolean
   selectedGroup?: Group
   setSelectedGroup?: (group: Group) => void
+  additionalGroups?: Group[]
+  isCreateButtonDisplayed?: boolean
+  createButtonText?: string
+  onCreateClick?: () => void
+  tableActionButtons?: IAcmTableButtonAction[]
 }
 
 const GroupsTable = ({
@@ -19,9 +24,20 @@ const GroupsTable = ({
   areLinksDisplayed = true,
   selectedGroup,
   setSelectedGroup,
+  additionalGroups,
+  isCreateButtonDisplayed,
+  createButtonText,
+  onCreateClick,
+  tableActionButtons,
 }: GroupsTableProps) => {
   const { t } = useTranslation()
-  const groups = useMergedGroups()
+
+  const groupsData = useMergedGroups()
+  const groups = useMemo(() => {
+    const all = [...(groupsData ?? []), ...(additionalGroups ?? [])]
+    const unique = all.filter((g, i, arr) => arr.findIndex((x) => x.metadata.name === g.metadata.name) === i)
+    return unique.toSorted((a, b) => compareStrings(a.metadata.name ?? '', b.metadata.name ?? ''))
+  }, [groupsData, additionalGroups])
 
   const handleRadioSelect = useCallback(
     (uid: string) => {
@@ -55,6 +71,7 @@ const GroupsTable = ({
       columns={columns}
       keyFn={keyFn}
       items={groups}
+      tableActionButtons={tableActionButtons}
       resultView={{
         page: 1,
         loading: false,
@@ -75,6 +92,11 @@ const GroupsTable = ({
           }
           action={
             <div>
+              {isCreateButtonDisplayed && onCreateClick && (
+                <AcmButton variant="primary" onClick={onCreateClick}>
+                  {createButtonText ?? t('Create group')}
+                </AcmButton>
+              )}
               <ViewDocumentationLink doclink={DOC_LINKS.IDENTITY_PROVIDER_CONFIGURATION} />
             </div>
           }

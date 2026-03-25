@@ -1,9 +1,9 @@
 /* Copyright Contributors to the Open Cluster Management project */
 import { useCallback, useMemo } from 'react'
+import { AcmButton, AcmEmptyState, AcmTable, compareStrings, IAcmTableButtonAction } from '~/ui-components'
 import { Trans, useTranslation } from '../../../../lib/acm-i18next'
 import { DOC_LINKS, ViewDocumentationLink } from '../../../../lib/doc-util'
 import { User } from '../../../../resources/rbac'
-import { AcmEmptyState, AcmTable } from '../../../../ui-components'
 import { useFilters, usersTableColumns } from '../IdentityTableHelper'
 import { useMergedUsers } from '../useMergedIdentities'
 
@@ -12,11 +12,32 @@ interface UsersTableProps {
   areLinksDisplayed?: boolean
   selectedUser?: User
   setSelectedUser?: (user: User) => void
+  additionalUsers?: User[]
+  isCreateButtonDisplayed?: boolean
+  createButtonText?: string
+  onCreateClick?: () => void
+  tableActionButtons?: IAcmTableButtonAction[]
 }
 
-const UsersTable = ({ hiddenColumns, areLinksDisplayed = true, selectedUser, setSelectedUser }: UsersTableProps) => {
+const UsersTable = ({
+  hiddenColumns,
+  areLinksDisplayed = true,
+  selectedUser,
+  setSelectedUser,
+  additionalUsers,
+  isCreateButtonDisplayed,
+  createButtonText,
+  onCreateClick,
+  tableActionButtons,
+}: UsersTableProps) => {
   const { t } = useTranslation()
-  const users = useMergedUsers()
+
+  const rbacUsers = useMergedUsers()
+  const users = useMemo(() => {
+    const all = [...(rbacUsers ?? []), ...(additionalUsers ?? [])]
+    const unique = all.filter((u, i, arr) => arr.findIndex((x) => x.metadata.name === u.metadata.name) === i)
+    return unique.toSorted((a, b) => compareStrings(a.metadata.name ?? '', b.metadata.name ?? ''))
+  }, [rbacUsers, additionalUsers])
 
   const handleRadioSelect = useCallback(
     (uid: string) => {
@@ -50,6 +71,7 @@ const UsersTable = ({ hiddenColumns, areLinksDisplayed = true, selectedUser, set
       columns={columns}
       keyFn={keyFn}
       items={users}
+      tableActionButtons={tableActionButtons}
       resultView={{
         page: 1,
         loading: false,
@@ -70,6 +92,11 @@ const UsersTable = ({ hiddenColumns, areLinksDisplayed = true, selectedUser, set
           }
           action={
             <div>
+              {isCreateButtonDisplayed && onCreateClick && (
+                <AcmButton variant="primary" onClick={onCreateClick}>
+                  {createButtonText ?? t('Create user')}
+                </AcmButton>
+              )}
               <ViewDocumentationLink doclink={DOC_LINKS.IDENTITY_PROVIDER_CONFIGURATION} />
             </div>
           }
