@@ -3,12 +3,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom-v5-compat'
 import { RecoilRoot } from 'recoil'
-import { Group, User } from '../../../resources/rbac'
-import { useMergedGroups, useMergedUsers } from '../../../routes/UserManagement/Identities/useMergedIdentities'
-import { useRecoilValue, useSharedAtoms } from '../../../shared-recoil'
+import { Group, User } from '../../resources/rbac'
+import { useMergedGroups, useMergedUsers } from '../../routes/UserManagement/Identities/useMergedIdentities'
+import { useRecoilValue, useSharedAtoms } from '../../shared-recoil'
 import { IdentitiesList } from './IdentitiesList'
 
-jest.mock('../../../routes/UserManagement/Identities/useMergedIdentities', () => ({
+jest.mock('../../routes/UserManagement/Identities/useMergedIdentities', () => ({
   useMergedUsers: jest.fn(),
   useMergedGroups: jest.fn(),
 }))
@@ -44,13 +44,13 @@ const mockGroups: Group[] = [
   },
 ]
 
-jest.mock('../../../lib/acm-i18next', () => ({
+jest.mock('../../lib/acm-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }))
 
-jest.mock('../../../shared-recoil', () => ({
+jest.mock('../../shared-recoil', () => ({
   useRecoilValue: jest.fn(),
   useSharedAtoms: jest.fn(),
 }))
@@ -77,7 +77,7 @@ function setupMocks(isDirectAuthenticationEnabled = false) {
   })
 }
 
-jest.mock('../../../routes/UserManagement/Identities/Users/UsersTable', () => ({
+jest.mock('../../routes/UserManagement/Identities/Users/UsersTable', () => ({
   UsersTable: (props: any) => (
     <div
       id="users-table"
@@ -115,7 +115,7 @@ jest.mock('../../../routes/UserManagement/Identities/Users/UsersTable', () => ({
   ),
 }))
 
-jest.mock('../../../routes/UserManagement/Identities/Groups/GroupsTable', () => ({
+jest.mock('../../routes/UserManagement/Identities/Groups/GroupsTable', () => ({
   GroupsTable: (props: any) => (
     <div
       id="groups-table"
